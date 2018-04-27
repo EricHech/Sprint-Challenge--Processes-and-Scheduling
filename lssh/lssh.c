@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #define PROMPT "lambda-shell$ "
 
 #define MAX_TOKENS 100
 #define COMMANDLINE_BUFSIZE 1024
-#define DEBUG 1  // Set to 1 to turn on some debugging output, or 0 to turn off
+#define DEBUG 0  // Set to 1 to turn on some debugging output, or 0 to turn off
 
 /**
  * Parse the command line.
@@ -101,6 +102,20 @@ int main(void)
         #endif
         
         /* Add your code for implementing the shell's logic here */
+        int rc = fork();
+
+        if (rc < 0) {
+            printf("Fork failed.\n");
+            exit(1);
+        } else if(rc > 0) {
+            waitpid(rc, NULL, 0);
+        } else {
+            if(strcmp(args[0], "cd") == 0) {
+                if(chdir(args[1]) == 0) continue;
+                printf("No such file or directory\n");
+            }
+            execvp(args[0], args);
+        }
         
     }
 
