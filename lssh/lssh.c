@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 #define PROMPT "lambda-shell$ "
 
@@ -112,7 +113,7 @@ int main(void)
         } else {
             if(strcmp(args[0], "cd") == 0) {
                 if(chdir(args[1]) == 0) continue;
-                printf("chdir: No such file or directory\n");
+                perror("chdir");
             }
             execvp(args[0], args);
         }
