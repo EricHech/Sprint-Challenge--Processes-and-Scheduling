@@ -105,14 +105,14 @@ int main(void)
         int rc = fork();
 
         if (rc < 0) {
-            printf("Fork failed.\n");
+            printf("fork failed\n");
             exit(1);
         } else if(rc > 0) {
             waitpid(rc, NULL, 0);
         } else {
             if(strcmp(args[0], "cd") == 0) {
                 if(chdir(args[1]) == 0) continue;
-                printf("No such file or directory\n");
+                printf("chdir: No such file or directory\n");
             }
             execvp(args[0], args);
         }
