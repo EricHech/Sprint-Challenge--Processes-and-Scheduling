@@ -103,6 +103,12 @@ int main(void)
         #endif
         
         /* Add your code for implementing the shell's logic here */
+        
+        if(strcmp(args[0], "cd") == 0) {
+            if(chdir(args[1]) == 0) continue;
+            perror("chdir");
+        }
+
         int rc = fork();
 
         if (rc < 0) {
@@ -111,13 +117,8 @@ int main(void)
         } else if(rc > 0) {
             waitpid(rc, NULL, 0);
         } else {
-            if(strcmp(args[0], "cd") == 0) {
-                if(chdir(args[1]) == 0) continue;
-                perror("chdir");
-            }
             execvp(args[0], args);
         }
-        
     }
 
     return 0;
